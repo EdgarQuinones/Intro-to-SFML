@@ -16,6 +16,9 @@
     <Filter Include="Resource Files\Texture Files">
       <UniqueIdentifier>{3c9806c1-69db-4d1d-99a8-ead52e681811}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Github Files">
+      <UniqueIdentifier>{48e5b930-c84f-4947-8db0-4ac325d9e819}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -26,5 +29,15 @@
     <Image Include="preview.jpg">
       <Filter>Resource Files\Texture Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Filter>Github Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources.txt">
+      <Filter>Github Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
