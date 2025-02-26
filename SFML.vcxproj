@@ -146,7 +146,9 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="preview.jpg" />
+    <Image Include="gravel.jpg" />
+    <Image Include="penguin.jpg" />
+    <Image Include="sprite-sheet_person.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

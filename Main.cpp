@@ -7,6 +7,7 @@ void textEvents();
 void square();
 void keyboardInput();
 void mouseInput();
+void textures();
 
 int main()
 {
@@ -16,12 +17,50 @@ int main()
     //textEvents();
     //square();
     //keyboardInput();
-    mouseInput();
-    
+    //mouseInput();
+    textures();
 
     return 0;
 }
+ 
+// Learning textures & sprite sheets
+void textures() {
 
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Textures");
+    sf::RectangleShape player(sf::Vector2f(100, 150));
+    player.setPosition(sf::Vector2f(400, 250));
+
+    //texture
+    sf::Texture playerTexture;
+    playerTexture.loadFromFile("sprite-sheet_person.png");
+    player.setTexture(&playerTexture);
+
+    // Texture coordinates 
+    sf::Vector2u textureSize = playerTexture.getSize();
+
+    // for sprite sheets
+    textureSize.x /= 3; // 3 columns for width
+    textureSize.y /= 4; // 4 rows for height
+    // x * 2 means index 2(3rd item) and y * 0 means index 1(fist item)
+    player.setTextureRect(sf::IntRect({ (int)textureSize.x * 2, (int)textureSize.y * 0}, { (int)textureSize.x, (int)textureSize.y }));
+
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close(); 
+            }
+
+
+        }
+        window.clear();
+        window.draw(player);
+        window.display();
+
+    }
+}
+
+// Mouse events and moving the box with it 
 void mouseInput() {
     sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Keyboards!!");
     sf::RectangleShape player(sf::Vector2f(100, 100));

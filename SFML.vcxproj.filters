@@ -15,6 +15,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Resources\Sprite Sheets">
+      <UniqueIdentifier>{1efad086-165b-4f27-8979-d6179b58baae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -22,8 +25,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="preview.jpg">
+    <Image Include="gravel.jpg">
       <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="penguin.jpg">
+      <Filter>Resources\Textures</Filter>
+    </Image>
+    <Image Include="sprite-sheet_person.png">
+      <Filter>Resources\Sprite Sheets</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
