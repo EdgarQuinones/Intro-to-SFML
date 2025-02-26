@@ -3,14 +3,171 @@
 
 void random();
 void windowAndEvents();
+void textEvents();
+void square();
+void keyboardInput();
+void mouseInput();
 
 int main()
 {
 
     //random();
-    windowAndEvents();
+    //windowAndEvents();
+    //textEvents();
+    //square();
+    //keyboardInput();
+    mouseInput();
+    
 
     return 0;
+}
+
+void mouseInput() {
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Keyboards!!");
+    sf::RectangleShape player(sf::Vector2f(100, 100));
+    player.setPosition(sf::Vector2f(400, 250));
+    player.setFillColor(sf::Color::Red);
+    player.setOrigin(sf::Vector2f(50, 50));
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                // Follows mouse exact position
+                sf::Vector2f mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+                player.setPosition(mousePosition);
+
+                std::cout << "Player Position: " << player.getPosition().x << ", " << player.getPosition().y << std::endl;
+
+            }
+        }
+
+        window.clear();
+        window.draw(player);
+        window.display();
+    }
+}
+
+// Using keyboard input to move a square
+void keyboardInput() {
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Keyboards!!");
+    sf::RectangleShape player(sf::Vector2f(100, 100));
+    player.setPosition(sf::Vector2f(400, 250));
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            // Reading key inputs
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
+
+                if (keyPressed->scancode == sf::Keyboard::Scan::Escape) {
+                    std::cout << "the escape key was pressed" << std::endl;
+                    std::cout << "scancode: " << static_cast<int>(keyPressed->scancode) << std::endl;
+                    std::cout << "code: " << static_cast<int>(keyPressed->code) << std::endl;
+                    std::cout << "control: " << keyPressed->control << std::endl;
+                    std::cout << "alt: " << keyPressed->alt << std::endl;
+                    std::cout << "shift: " << keyPressed->shift << std::endl;
+                    std::cout << "system: " << keyPressed->system << std::endl;
+                    std::cout << "description: " << sf::Keyboard::getDescription(keyPressed->scancode).toAnsiString() << std::endl;
+                    std::cout << "localize: " << static_cast<int>(sf::Keyboard::localize(keyPressed->scancode)) << std::endl;
+                    std::cout << "delocalize: " << static_cast<int>(sf::Keyboard::delocalize(keyPressed->code)) << std::endl;
+
+                }
+
+                // move square up/down/left/right
+                if (keyPressed->scancode == sf::Keyboard::Scan::A) {
+                    // move square to the left
+                    player.move(sf::Vector2f(-10, 0));
+                }
+                if (keyPressed->scancode == sf::Keyboard::Scan::S) {
+                    // move square to the left
+                    player.move(sf::Vector2f(0, 10));
+                }
+                if (keyPressed->scancode == sf::Keyboard::Scan::W) {
+                    // move square to the left
+                    player.move(sf::Vector2f(0, -10));
+                }
+                if (keyPressed->scancode == sf::Keyboard::Scan::D) {
+                    // move square to the left
+                    player.move(sf::Vector2f(10, 0));
+                }
+
+
+
+            }
+        }
+
+        window.clear();
+        window.draw(player);
+        window.display();
+    }
+
+}
+
+// Draw a square
+void square() {
+
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Squares!!!!", sf::Style::Default);
+    sf::RectangleShape player(sf::Vector2f(100, 100)); // Make a rectangle
+    player.setFillColor(sf::Color::Cyan); // Set the color
+    player.setPosition(sf::Vector2f(400, 250)); // set the location
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            // When the left mouse button is pressed, rotate the square by 15 degrees 
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                player.rotate(sf::degrees(15));
+            }
+
+        }
+
+        window.clear(); // clear front buffer
+        window.draw(player); // add player to back buffer
+        window.display(); // swap buffers
+
+    }
+
+}
+
+// How to take user input and print it
+void textEvents() {
+
+    // Create window
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Text Events!!");
+
+    // Loop while window is open
+    while (window.isOpen()) {
+
+        // Keep track of window events
+        while (const std::optional event = window.pollEvent()) {
+
+            // If window close button is pressed, close the window
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            // Prints out the character the user pressed 
+            if (const auto* textEntered = event->getIf<sf::Event::TextEntered>()) {
+
+                if (textEntered->unicode < 128) {
+                    std::cout << static_cast<char>(textEntered->unicode);
+
+                }
+            }
+        }
+    }
+
 }
 
 // How to make a window, plus some event checking
@@ -36,11 +193,15 @@ void windowAndEvents() {
                 std::cout << x << ", " << y << std::endl;
             }
 
-            // If the window is closed
+            // If close button pressed, close window
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
-                
+            
+            // Window auto closes once out of focus, used for debugging purposes
+            if (!window.hasFocus()) {
+                window.close();
+            }
 
         }
 
