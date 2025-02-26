@@ -2,19 +2,19 @@
 #include <iostream>
 
 void random();
-void window();
+void windowAndEvents();
 
 int main()
 {
 
     //random();
-    window();
+    windowAndEvents();
 
     return 0;
 }
 
-// How to make a window
-void window() {
+// How to make a window, plus some event checking
+void windowAndEvents() {
 
     sf::RenderWindow window(sf::VideoMode({ 512, 512 }), "This is a window!", sf::Style::Default);
 
