@@ -1,8 +1,54 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+void random();
+void window();
+
 int main()
 {
+
+    //random();
+    window();
+
+    return 0;
+}
+
+// How to make a window
+void window() {
+
+    sf::RenderWindow window(sf::VideoMode({ 512, 512 }), "This is a window!", sf::Style::Default);
+
+    while (window.isOpen()) {
+        
+        while (const std::optional event = window.pollEvent()) {
+
+            // If the window is resized, print size
+            if (event->is<sf::Event::Resized>()) {
+                sf::Vector2u size = window.getSize();
+                auto [width, height] = size;
+                std::cout << "(" << width << ", " << height << ")" << std::endl;
+            }
+
+            // If left mouse button is clicked, print relative location in window
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
+                auto [x, y] = localPosition;
+                std::cout << x << ", " << y << std::endl;
+            }
+
+            // If the window is closed
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+                
+
+        }
+
+    }
+}
+
+// Some random stuff I learned on the first day
+void random() {
     // SFML windows are handled by the sf::Window class
         // Argument 1: Defines the size of the window with the sf::VideoMode class 
         // Argument 2: Title of the window
@@ -27,7 +73,7 @@ int main()
     // Mouse Settings
     sf::Vector2i globalPosition = sf::Mouse::getPosition();
     sf::Mouse::setPosition({ 10, 50 });
-    
+
     // Draw using the sf::RenderWindow class (superset of sf::window)
     sf::RenderWindow window(sf::VideoMode({ 1200,600 }), "Draw Window");
 
@@ -51,13 +97,13 @@ int main()
     // Window will not work for 2 reasons 
         // No loop (Window closes right away)
         // No event handling (Window buttons wont work)
-    
+
     // Run as long as the window is open
     while (window.isOpen()) {
 
         // Check all windows events since last iteration
         while (const std::optional event = window.pollEvent()) {
-            
+
             // If "close event" event called, close the window
             if (event->is<sf::Event::Closed>())
                 window.close();
@@ -82,10 +128,4 @@ int main()
 
 
     }
-
-
-    return 0;
 }
-
-
-// Current: https://www.sfml-dev.org/tutorials/3.0/graphics/text/
