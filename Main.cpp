@@ -8,6 +8,7 @@ void square();
 void keyboardInput();
 void mouseInput();
 void textures();
+void button();
 
 int main()
 {
@@ -18,11 +19,67 @@ int main()
     //square();
     //keyboardInput();
     //mouseInput();
-    textures();
+    //textures();
+    button();
 
     return 0;
 }
  
+// mouse presses square, and something happens
+void button() {
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Button!");
+    
+    sf::RectangleShape button(sf::Vector2f(100, 100));
+    button.setPosition(sf::Vector2f(400, 250));
+    button.setFillColor(sf::Color::Red);
+    sf::Vector2f buttonPosition = button.getPosition();
+    sf::Vector2f buttonSize = button.getSize();
+    button.setOrigin(sf::Vector2f(buttonSize.x / 2, buttonSize.y / 2));
+    bool buttonClicked = false;
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !buttonClicked) {
+                sf::Vector2f mousePosition =  static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+                buttonClicked = true;
+
+                // If the mouse is inside the button, button is pressed 
+                if (mousePosition.x >= buttonPosition.x - (buttonSize.x / 2) &&
+                    mousePosition.x <= buttonPosition.x + (buttonSize.x / 2) &&
+                    mousePosition.y >= buttonPosition.y - (buttonSize.y / 2) &&
+                    mousePosition.y <= buttonPosition.y + (buttonSize.y / 2)) {
+                    /*std::cout << "Mouse Position: " << mousePosition.x << "," << mousePosition.y << std::endl;
+                    std::cout << "left x border: " << buttonPosition.x - (buttonSize.x / 2) << std::endl;
+                    std::cout << "right x border: " << buttonPosition.x + (buttonSize.x / 2) << std::endl;
+                    std::cout << "up y border: " << buttonPosition.y - (buttonSize.y / 2) << std::endl;
+                    std::cout << "down x border: " << buttonPosition.y + (buttonSize.y / 2) << std::endl << std::endl;*/
+                    
+                    if (button.getFillColor() == sf::Color::Red) button.setFillColor(sf::Color::Cyan);
+                    else if (button.getFillColor() == sf::Color::Cyan) button.setFillColor(sf::Color::Yellow);
+                    else if (button.getFillColor() == sf::Color::Yellow) button.setFillColor(sf::Color::Red);
+
+                }
+
+            }
+            // Button cannot be clicked again until the LEFT mouse button is released
+            if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>()) {
+                if (mouseButtonReleased->button == sf::Mouse::Button::Left) {
+                    buttonClicked = false;
+                }
+            }
+        }
+
+        window.clear();
+        window.draw(button);
+        window.display();
+
+    }
+}
+
 // Learning textures & sprite sheets
 void textures() {
 
