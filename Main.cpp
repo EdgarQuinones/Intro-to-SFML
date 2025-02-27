@@ -9,10 +9,11 @@ void keyboardInput();
 void mouseInput();
 void textures();
 void button();
+void drag();
+bool mouseInPolygon(sf::Vector2f, sf::Vector2f, sf::Vector2f);
 
 int main()
 {
-
     //random();
     //windowAndEvents();
     //textEvents();
@@ -20,21 +21,77 @@ int main()
     //keyboardInput();
     //mouseInput();
     //textures();
-    button();
+    //button();
+    drag();
 
     return 0;
 }
- 
+
+// Handles the check if the mouse is currently in a polygon
+bool mouseInPolygon(sf::Vector2f mousePosition, sf::Vector2f polygonPosition, sf::Vector2f polygonSize) {
+    bool inside = false;
+
+    if (mousePosition.x >= polygonPosition.x - (polygonSize.x / 2) &&
+        mousePosition.x <= polygonPosition.x + (polygonSize.x / 2) &&
+        mousePosition.y >= polygonPosition.y - (polygonSize.y / 2) &&
+        mousePosition.y <= polygonPosition.y + (polygonSize.y / 2))
+        inside = true;
+
+    return inside;
+}
+
+// drag a square around if holding it down
+void drag() {
+    sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Button!");
+
+    sf::RectangleShape button1(sf::Vector2f(100, 100));
+    button1.setPosition(sf::Vector2f(400, 250));
+    button1.setFillColor(sf::Color::Red);
+    sf::Vector2f buttonSize1 = button1.getSize();
+    button1.setOrigin(sf::Vector2f(buttonSize1.x / 2, buttonSize1.y / 2)); // Origin is middle of the square
+
+    sf::RectangleShape button2(sf::Vector2f(100, 100));
+    button2.setPosition(sf::Vector2f(200, 150));
+    button2.setFillColor(sf::Color::Cyan);
+    sf::Vector2f buttonSize2 = button2.getSize();
+    button2.setOrigin(sf::Vector2f(buttonSize2.x / 2, buttonSize2.y / 2)); // Origin is middle of the square
+
+    while (window.isOpen()) {
+        while (const std::optional event = window.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) {
+                window.close();
+            }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left)) {
+                sf::Vector2f mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+                sf::Vector2f buttonPosition1 = button1.getPosition();
+                sf::Vector2f buttonPosition2 = button2.getPosition();
+
+                // If the mouse is inside the button and held, it is dragged
+                if (mouseInPolygon(mousePosition, buttonPosition1, buttonSize1)) button1.setPosition(mousePosition);
+                if (mouseInPolygon(mousePosition, buttonPosition2, buttonSize2)) button2.setPosition(mousePosition);
+                
+            }
+        }
+
+        window.clear();
+        window.draw(button1);
+        window.draw(button2);
+        window.display();
+
+    }
+}
+
 // mouse presses square, and something happens
 void button() {
     sf::RenderWindow window(sf::VideoMode({ 800, 500 }), "Button!");
-    
+
     sf::RectangleShape button(sf::Vector2f(100, 100));
     button.setPosition(sf::Vector2f(400, 250));
     button.setFillColor(sf::Color::Red);
     sf::Vector2f buttonPosition = button.getPosition();
     sf::Vector2f buttonSize = button.getSize();
-    button.setOrigin(sf::Vector2f(buttonSize.x / 2, buttonSize.y / 2));
+    button.setOrigin(sf::Vector2f(buttonSize.x / 2, buttonSize.y / 2)); // Origin is middle of the square
     bool buttonClicked = false;
 
     while (window.isOpen()) {
@@ -44,7 +101,7 @@ void button() {
             }
 
             if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && !buttonClicked) {
-                sf::Vector2f mousePosition =  static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+                sf::Vector2f mousePosition = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
                 buttonClicked = true;
 
                 // If the mouse is inside the button, button is pressed 
@@ -57,7 +114,8 @@ void button() {
                     std::cout << "right x border: " << buttonPosition.x + (buttonSize.x / 2) << std::endl;
                     std::cout << "up y border: " << buttonPosition.y - (buttonSize.y / 2) << std::endl;
                     std::cout << "down x border: " << buttonPosition.y + (buttonSize.y / 2) << std::endl << std::endl;*/
-                    
+
+                    // Everytime the button is clicked, it changes color
                     if (button.getFillColor() == sf::Color::Red) button.setFillColor(sf::Color::Cyan);
                     else if (button.getFillColor() == sf::Color::Cyan) button.setFillColor(sf::Color::Yellow);
                     else if (button.getFillColor() == sf::Color::Yellow) button.setFillColor(sf::Color::Red);
@@ -99,13 +157,13 @@ void textures() {
     textureSize.x /= 3; // 3 columns for width
     textureSize.y /= 4; // 4 rows for height
     // x * 2 means index 2(3rd item) and y * 0 means index 1(fist item)
-    player.setTextureRect(sf::IntRect({ (int)textureSize.x * 2, (int)textureSize.y * 0}, { (int)textureSize.x, (int)textureSize.y }));
+    player.setTextureRect(sf::IntRect({ (int)textureSize.x * 2, (int)textureSize.y * 0 }, { (int)textureSize.x, (int)textureSize.y }));
 
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
             if (event->is<sf::Event::Closed>()) {
-                window.close(); 
+                window.close();
             }
 
 
@@ -194,8 +252,6 @@ void keyboardInput() {
                     player.move(sf::Vector2f(10, 0));
                 }
 
-
-
             }
         }
 
@@ -216,7 +272,7 @@ void square() {
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
-            
+
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
@@ -272,7 +328,7 @@ void windowAndEvents() {
     sf::RenderWindow window(sf::VideoMode({ 512, 512 }), "This is a window!", sf::Style::Default);
 
     while (window.isOpen()) {
-        
+
         while (const std::optional event = window.pollEvent()) {
 
             // If the window is resized, print size
@@ -293,7 +349,7 @@ void windowAndEvents() {
             if (event->is<sf::Event::Closed>()) {
                 window.close();
             }
-            
+
             // Window auto closes once out of focus, used for debugging purposes
             if (!window.hasFocus()) {
                 window.close();
@@ -307,11 +363,11 @@ void windowAndEvents() {
 // Some random stuff I learned on the first day
 void random() {
     // SFML windows are handled by the sf::Window class
-        // Argument 1: Defines the size of the window with the sf::VideoMode class 
-        // Argument 2: Title of the window
-        // Argument 3 (Optional): Window style
-        // Argument 4 (Optional): Full screen or not
-        // Argument 5 (Optional): OpenGL Specific options
+    // Argument 1: Defines the size of the window with the sf::VideoMode class 
+    // Argument 2: Title of the window
+    // Argument 3 (Optional): Window style
+    // Argument 4 (Optional): Full screen or not
+    // Argument 5 (Optional): OpenGL Specific options
     //sf::Window window(sf::VideoMode({ 800, 600 }), "My Window", sf::Style::Default, sf::State::Windowed);
 
     // Can also make window with create function
@@ -352,8 +408,8 @@ void random() {
 
 
     // Window will not work for 2 reasons 
-        // No loop (Window closes right away)
-        // No event handling (Window buttons wont work)
+    // No loop (Window closes right away)
+    // No event handling (Window buttons wont work)
 
     // Run as long as the window is open
     while (window.isOpen()) {
@@ -371,7 +427,6 @@ void random() {
             //}
         }
 
-
         // Clear window with color black
         window.clear(sf::Color::Black);
 
@@ -379,10 +434,8 @@ void random() {
         window.draw(sprite);
         sprite.rotate(sf::degrees(2)); // This is absolute, use .rotate for local
 
-
         // end current frame
         window.display();
-
 
     }
 }
