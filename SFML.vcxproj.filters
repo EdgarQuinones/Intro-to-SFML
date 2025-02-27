@@ -39,10 +39,8 @@
     <None Include="README.md">
       <Filter>Github</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="resources.txt">
+    <None Include="resources.md">
       <Filter>Github</Filter>
-    </Text>
+    </None>
   </ItemGroup>
 </Project>

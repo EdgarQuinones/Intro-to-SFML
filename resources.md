@@ -11,3 +11,6 @@ Below are some resources I have used while learning SFML
 - Mouse: https://www.sfml-dev.org/tutorials/3.0/window/inputs/#mouse
 - Migration: https://www.sfml-dev.org/tutorials/3.0/getting-started/migrate/#sfwindowbasehandleevents
 - Reddit: https://www.reddit.com/r/sfml/comments/1if1elv/sfml_30_seems_more_complex/
+
+### Stack Overflow 
+- Mouse-Lock: https://stackoverflow.com/questions/30372484/sfml-mouse-click-detection
